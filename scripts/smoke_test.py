@@ -77,6 +77,12 @@ def main() -> int:
     from src.analysis.setup import diagnose, to_markdown
     print(to_markdown(diagnose(daily)))
 
+    print("[smoke] alertas...")
+    from src.alerts.engine import run as run_alerts, format_text
+    fired = run_alerts(daily)
+    print(format_text(fired))
+    print(f"  total alertas: {len(fired)}")
+
     print("[smoke] backtests...")
     from src.backtest.patterns import (
         backtest_best_hour, backtest_session_long,

@@ -26,6 +26,10 @@ python scripts/run_analysis.py --no-plots
 
 # diagnóstico rápido del setup actual (sólo consola)
 python scripts/diagnose.py
+
+# evaluar catálogo de alertas y guardar histórico
+python scripts/check_alerts.py
+python scripts/check_alerts.py --json
 ```
 
 Salida: `reports/output/xauusd_report.md` + PNGs.
@@ -44,6 +48,9 @@ src/
 │   ├── indicators.py         # RSI, MACD, Bollinger, EMAs
 │   ├── levels.py             # swings, pivots, fibonacci, niveles psicológicos
 │   └── setup.py              # diagnóstico textual combinando todo
+├── alerts/
+│   ├── rules.py              # 10 reglas declarativas (catálogo)
+│   └── engine.py             # motor de evaluación + persistencia JSONL
 ├── backtest/patterns.py      # backtest de patrones detectados
 └── reports/
     ├── plots.py              # 7 figuras PNG (matplotlib)

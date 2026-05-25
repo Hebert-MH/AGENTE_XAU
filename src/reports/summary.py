@@ -14,6 +14,7 @@ from src.analysis.correlations import correlation_matrix, beta_to, lead_lag
 from src.analysis.regimes import regime_summary
 from src.analysis.indicators import technical_snapshot
 from src.analysis.setup import diagnose, to_markdown as setup_md
+from src.alerts.engine import run as run_alerts, format_text as alerts_text
 from src.backtest.patterns import (
     backtest_best_hour, backtest_session_long,
     backtest_trend_following, backtest_mean_reversion_rsi,
@@ -37,7 +38,14 @@ def build(df_daily: pd.DataFrame, df_hourly: pd.DataFrame, panel_daily: dict[str
     add(_md_table(pd.DataFrame([snap])))
 
     add("\n")
-    add(setup_md(diagnose(df_daily)))
+    diag = diagnose(df_daily)
+    add(setup_md(diag))
+
+    add("\n### Alertas disparadas\n")
+    fired = run_alerts(df_daily, state=diag)
+    add("```")
+    add(alerts_text(fired))
+    add("```")
 
     add("\n## 2. Régimen y volatilidad\n")
     add(_md_table(pd.DataFrame([regime_summary(df_daily)])))
