@@ -23,6 +23,9 @@ python scripts/run_analysis.py --refresh
 
 # sólo reporte (sin gráficos, más rápido)
 python scripts/run_analysis.py --no-plots
+
+# diagnóstico rápido del setup actual (sólo consola)
+python scripts/diagnose.py
 ```
 
 Salida: `reports/output/xauusd_report.md` + PNGs.
@@ -38,7 +41,9 @@ src/
 │   ├── volatility.py         # ATR, vol realizada, vol por hora, regímenes
 │   ├── correlations.py       # matriz, rolling, lead-lag, beta
 │   ├── regimes.py            # ADX, trend/range, bull/bear (EMA cross)
-│   └── indicators.py         # RSI, MACD, Bollinger, EMAs
+│   ├── indicators.py         # RSI, MACD, Bollinger, EMAs
+│   ├── levels.py             # swings, pivots, fibonacci, niveles psicológicos
+│   └── setup.py              # diagnóstico textual combinando todo
 ├── backtest/patterns.py      # backtest de patrones detectados
 └── reports/
     ├── plots.py              # 7 figuras PNG (matplotlib)

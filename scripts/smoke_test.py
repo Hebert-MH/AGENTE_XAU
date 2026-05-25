@@ -69,6 +69,14 @@ def main() -> int:
     from src.analysis.indicators import technical_snapshot
     print(technical_snapshot(daily))
 
+    print("[smoke] niveles + diagnóstico setup...")
+    from src.analysis.levels import key_levels, fibonacci_levels, psychological_levels
+    print("key_levels:", key_levels(daily))
+    print("fib:", fibonacci_levels(daily))
+    print("psy:", psychological_levels(float(daily['Close'].iloc[-1])))
+    from src.analysis.setup import diagnose, to_markdown
+    print(to_markdown(diagnose(daily)))
+
     print("[smoke] backtests...")
     from src.backtest.patterns import (
         backtest_best_hour, backtest_session_long,

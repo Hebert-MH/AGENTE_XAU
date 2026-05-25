@@ -13,6 +13,7 @@ from src.analysis.volatility import vol_summary, vol_by_hour
 from src.analysis.correlations import correlation_matrix, beta_to, lead_lag
 from src.analysis.regimes import regime_summary
 from src.analysis.indicators import technical_snapshot
+from src.analysis.setup import diagnose, to_markdown as setup_md
 from src.backtest.patterns import (
     backtest_best_hour, backtest_session_long,
     backtest_trend_following, backtest_mean_reversion_rsi,
@@ -34,6 +35,9 @@ def build(df_daily: pd.DataFrame, df_hourly: pd.DataFrame, panel_daily: dict[str
     add("## 1. Snapshot actual\n")
     snap = technical_snapshot(df_daily)
     add(_md_table(pd.DataFrame([snap])))
+
+    add("\n")
+    add(setup_md(diagnose(df_daily)))
 
     add("\n## 2. Régimen y volatilidad\n")
     add(_md_table(pd.DataFrame([regime_summary(df_daily)])))
