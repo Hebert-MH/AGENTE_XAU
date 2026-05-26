@@ -83,6 +83,29 @@ def main() -> int:
     print(format_text(fired))
     print(f"  total alertas: {len(fired)}")
 
+    print("[smoke] agente: tools + system prompt (sin llamar a la API)...")
+    from src.agent.tools import TOOL_SCHEMAS, execute as exec_tool
+    from src.agent.prompt import build_system
+    import json as _json
+    print(f"  tools registradas: {len(TOOL_SCHEMAS)}")
+    sys_blocks = build_system(daily)
+    print(f"  system blocks: {len(sys_blocks)}, snapshot len: {len(sys_blocks[-1]['text'])} chars, cache_control: {sys_blocks[-1].get('cache_control')}")
+    for tn, targs in [
+        ("get_setup_diagnosis", {}),
+        ("get_alerts", {}),
+        ("get_temporal_patterns", {"timeframe": "hour", "top_n": 3}),
+        ("get_session_stats", {}),
+        ("get_correlations", {"include_leadlag": False}),
+        ("get_technical_indicators", {}),
+        ("get_levels", {"n": 3}),
+        ("get_volatility_breakdown", {}),
+        ("run_backtest", {"strategy": "best_hour"}),
+    ]:
+        res = exec_tool(tn, targs, daily=daily, hourly=hourly, panel=panel)
+        parsed = _json.loads(res)
+        is_err = isinstance(parsed, dict) and "error" in parsed
+        print(f"  {tn}: {len(res)} chars" + (f"  ERROR: {parsed['error']}" if is_err else ""))
+
     print("[smoke] backtests...")
     from src.backtest.patterns import (
         backtest_best_hour, backtest_session_long,
